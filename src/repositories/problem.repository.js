@@ -7,6 +7,10 @@ class ProblemRepository {
         title: problemData.title,
         description: problemData.description,
         testCases: problemData.testCases ? problemData.testCases : [],
+        codeStubs: problemData.codeStubs ? problemData.codeStubs : [],
+        editorial: problemData.editorial ? problemData.editorial : '',
+        topic: problemData.topic ? problemData.topic : '',
+        difficulty: problemData.difficulty ? problemData.difficulty : 'easy',
       });
       return problem;
     } catch (err) {

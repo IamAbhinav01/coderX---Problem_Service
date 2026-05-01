@@ -1,9 +1,9 @@
-const statusCodes = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const BaseError = require('./Base.err');
-const { StatusCodes } = require('status-codes');
+
 class NotImplemented extends BaseError {
   constructor(methodName) {
-    super('Not Implemented', statusCodes.NotImplemented, {});
+    super('NotImplemented', StatusCodes.NOT_IMPLEMENTED, `${methodName} is not implemented`, {});
   }
 }
 module.exports = NotImplemented;

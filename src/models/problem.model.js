@@ -32,11 +32,11 @@ const problemSchema = new schema({
     },
   ],
 
-  codeStubs: [
+  codeSnippets: [
     {
       language: {
         type: String,
-        enum: ['python', 'java', 'cpp'],
+        enum: ['python', 'java', 'cpp', 'Python', 'Java', 'CPP'],
         required: true,
       },
 

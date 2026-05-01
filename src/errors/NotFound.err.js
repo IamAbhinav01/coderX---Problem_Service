@@ -1,9 +1,9 @@
-const statusCodes = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const BaseError = require('./Base.err');
-const { StatusCodes } = require('status-codes');
+
 class NotFoundError extends BaseError {
-  constructor(methodName) {
-    super('Not Found', statusCodes.NotFound, {});
+  constructor(resourceName, details) {
+    super('NotFoundError', StatusCodes.NOT_FOUND, `The requested resource ${resourceName} was not found`, details);
   }
 }
 module.exports = NotFoundError;

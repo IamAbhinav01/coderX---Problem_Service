@@ -1,9 +1,9 @@
-const statusCodes = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 const BaseError = require('./Base.err');
-const { StatusCodes } = require('status-codes');
-class InternalError extends BaseError {
-  constructor(methodName) {
-    super('Internal Server Error', statusCodes.InternalServerError, {});
+
+class InternalServerError extends BaseError {
+  constructor(details) {
+    super('InternalServerError', StatusCodes.INTERNAL_SERVER_ERROR, `Something went wrong !!`, details);
   }
 }
-module.exports = InternalError;
+module.exports = InternalServerError;

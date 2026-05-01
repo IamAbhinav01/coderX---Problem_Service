@@ -25,7 +25,7 @@ function pingProblemChecker(req, res) {
   return res.json({ message: 'Ping controller is up' });
 }
 
-async function getProblem(req, res) {
+async function getProblem(req, res, next) {
   try {
     const problem = await problemService.getProblem(req.params.id);
     return res.status(StatusCodes.OK).json({
@@ -37,7 +37,7 @@ async function getProblem(req, res) {
     next(err);
   }
 }
-async function getProblems(req, res) {
+async function getProblems(req, res, next) {
   try {
     const problems = await problemService.getProblems();
     return res.status(StatusCodes.OK).json({
@@ -49,7 +49,7 @@ async function getProblems(req, res) {
     next(err);
   }
 }
-async function deleteProblem(req, res) {
+async function deleteProblem(req, res, next) {
   try {
     await problemService.deleteProblem(req.params.id);
     return res.status(StatusCodes.OK).json({
@@ -60,7 +60,7 @@ async function deleteProblem(req, res) {
     next(err);
   }
 }
-function updateProblem(req, res) {
+function updateProblem(req, res, next) {
   try {
     const updatedProblem = problemService.updateProblem(
       req.params.id,

@@ -60,9 +60,9 @@ async function deleteProblem(req, res, next) {
     next(err);
   }
 }
-function updateProblem(req, res, next) {
+async function updateProblem(req, res, next) {
   try {
-    const updatedProblem = problemService.updateProblem(
+    const updatedProblem = await problemService.updateProblem(
       req.params.id,
       req.body
     );

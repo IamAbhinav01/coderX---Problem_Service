@@ -24,8 +24,11 @@ class ProblemRepository {
       return problem;
     } catch (err) {
       if (err instanceof NotFoundError) throw err;
+      if (err.name === 'CastError') {
+        throw new NotFoundError('Problem', { id: problemId });
+      }
       console.error(`Error finding problem ${problemId}:`, err);
-      throw new NotFoundError('Problem', { id: problemId, error: err.message });
+      throw err;
     }
   }
 
@@ -48,22 +51,32 @@ class ProblemRepository {
       return result;
     } catch (err) {
       if (err instanceof NotFoundError) throw err;
-      throw new NotFoundError('Problem', { id: problemId });
+      if (err.name === 'CastError') {
+        throw new NotFoundError('Problem', { id: problemId });
+      }
+      console.error(`Error deleting problem ${problemId}:`, err);
+      throw err;
     }
   }
 
   async updateProblem(problemId, problemData) {
     try {
-      const problem = await Problem.findByIdAndUpdate(problemId, problemData, {
-        new: true,
-      });
+      const problem = await Problem.findByIdAndUpdate(
+        problemId,
+        { $set: problemData },
+        { new: true, runValidators: true }
+      );
       if (!problem) {
         throw new NotFoundError('Problem', { id: problemId });
       }
       return problem;
     } catch (err) {
       if (err instanceof NotFoundError) throw err;
-      throw new NotFoundError('Problem', { id: problemId });
+      if (err.name === 'CastError') {
+        throw new NotFoundError('Problem', { id: problemId });
+      }
+      console.error(`Error updating problem ${problemId}:`, err);
+      throw err;
     }
   }
 }

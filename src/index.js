@@ -9,7 +9,6 @@ const config = require('./config/server.config');
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.text());
 app.use('/api', apiRouter);
 app.use(errorHandler);
 app.listen(4000, async () => {

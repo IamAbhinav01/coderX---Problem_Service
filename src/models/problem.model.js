@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const problemSchema = new schema({
+  _id: {
+    type: String,
+    required: true,
+    default: () => new mongoose.Types.ObjectId().toString(),
+  },
   title: {
     type: String,
     required: [true, 'title is required'],
@@ -43,6 +48,11 @@ const problemSchema = new schema({
       startSnippet: {
         type: String,
         required: true,
+      },
+
+      midSnippet: {
+        type: String,
+        default: '',
       },
 
       endSnippet: {

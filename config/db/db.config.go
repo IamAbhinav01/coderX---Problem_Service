@@ -3,6 +3,7 @@ package db
 import (
 	"coderX/config/env"
 	"context"
+	"fmt"
 	"log"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -26,6 +27,7 @@ func DBInit() error{
 	
 	if MONGO_DB == ""{
 		log.Fatal("Error while fetching MONGODB URI from env")
+		return fmt.Errorf("Error while fetching the mongoDB URI from env")
 	}
 	
 	clientOption := options.Client().ApplyURI(MONGO_DB)
@@ -33,6 +35,7 @@ func DBInit() error{
 
 	if err != nil{
 		log.Fatal("Error while connecting to mongoDB",err)
+		return fmt.Errorf("Error happend while connecting to MongoDB")
 	}
 
 	Client = client
@@ -40,6 +43,7 @@ func DBInit() error{
 	err = client.Ping(context.Background(),nil)
 	if err!= nil{
 		log.Fatal("Unable to connect to MongoDB",err)
+		return fmt.Errorf("Unable to connect to MONGODB")
 	}
 
 	Database = client.Database(db_name)

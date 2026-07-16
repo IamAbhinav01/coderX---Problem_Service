@@ -1,2 +1,6 @@
 .env
 node_modules
+check_db.js
+src
+package.json
+package-lock.json

@@ -9,9 +9,20 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var (
+	Client *mongo.Client
+	Database *mongo.Database
+	Problems *mongo.Collection
+	Submissions *mongo.Collection
+)
+
+
 func DBInit() error{
 
-	MONGO_DB := env.GetString("ATLAS_DB_URL")
+	MONGO_DB := env.GetString("MONGO_DB_URL")
+	db_name := env.GetString("DB_NAME")
+	problem_collection := env.GetString("ProblemCollection")
+	submission_collection := env.GetString("SubmissionCollection")
 	
 	if MONGO_DB == ""{
 		log.Fatal("Error while fetching MONGODB URI from env")
@@ -24,12 +35,18 @@ func DBInit() error{
 		log.Fatal("Error while connecting to mongoDB",err)
 	}
 
+	Client = client
+
 	err = client.Ping(context.Background(),nil)
 	if err!= nil{
 		log.Fatal("Unable to connect to MongoDB",err)
 	}
 
-	DB := client.Database("")
-	
+	Database = client.Database(db_name)
+
+	Problems = Database.Collection(problem_collection)
+	Submissions = Database.Collection(submission_collection)
+
+	return nil
 }
 

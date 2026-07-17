@@ -4,31 +4,42 @@ import (
 	"coderX/models"
 	"context"
 	"log"
+	"time"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type ProblemRepository interface {
-	CreateProblem() (*mongo.InsertOneResult, error)
-	GetProblem()
-	GetAllProblems()
-	UpdateProbelm()
-	DeleteProblem()
+	CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error)
+	// GetProblem()
+	// GetAllProblems()
+	// UpdateProbelm()
+	// DeleteProblem()
 }
 
 type ProblemRepositoryImpl struct {
 	db *mongo.Collection
 }
 
-func(repo *ProblemRepositoryImpl) CreateProblem() (*mongo.InsertOneResult, error){
+func NewProblemsRepository(_db *mongo.Collection) *ProblemRepositoryImpl{
+	return &ProblemRepositoryImpl{
+		db: _db,
+	}
+}
 
-	var problem models.Problem
-	result,err := repo.db.InsertOne(context.Background(),problem)
+func(repo *ProblemRepositoryImpl) CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error){
+
+	problemPayload.CreatedAt = time.Now()
+	problemPayload.ID = primitive.NewObjectID()
+
+	_,err := repo.db.InsertOne(ctx,problemPayload)
+
 	if err != nil{
 		log.Println("Error occured while storing the problem data to MongoDB")
 		return nil,err
 	}
-	
-	return result,nil
+
+	return problemPayload,nil
 
 }

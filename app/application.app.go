@@ -36,7 +36,6 @@ func (app *Application) Run() error{
 	if strings.HasPrefix(addr,""){
 		addr = ":" + addr
 	}
-
 	server := http.Server{
 		Addr: addr,
 		Handler: http.DefaultServeMux,

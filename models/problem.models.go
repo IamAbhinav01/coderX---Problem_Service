@@ -21,7 +21,7 @@ type CodeSnippet struct{
 type Problem struct {
 	ID          primitive.ObjectID
 	Title       string `bson:"title" json:"title"`
-	Tescription string `bson:"Tescription" json:"Tescription"`
+	Description string `bson:"description" json:"description"`
 	Difficulty  string `bson:"Difficulty" json:"Difficulty"`
 	TestCases []TestCase `bson:"testcases" json:"testcases"`
 	CodeSnippets []CodeSnippet `bson:"codesnippets" json:"codesnippets"`

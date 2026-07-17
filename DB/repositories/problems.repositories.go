@@ -11,7 +11,7 @@ import (
 )
 
 type ProblemRepository interface {
-	CreateProblem() (*models.Problem, error)
+	CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error)
 	// GetProblem()
 	// GetAllProblems()
 	// UpdateProbelm()

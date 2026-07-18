@@ -3,6 +3,8 @@ package controllers
 import (
 	"coderX/middleware"
 	"coderX/services"
+	"coderX/models"
+	"coderX/utils/fomatter"
 	"net/http"
 )
 
@@ -16,37 +18,33 @@ func NewProblemController (_service services.ProblemService) *ProblemController{
 	}
 }
 
-func (controller *ProblemController) CreateProblem(w http.ResponseWriter,r *http.Request){
+func (controller *ProblemController) CreateProblem(w http.ResponseWriter, r *http.Request) {
 	
-	payload := r.Context().Value(middleware.PayloadContextKey)
-	response , err := controller.service.CreateProblem(r.Context(),payload)
-}
-
-
-
-func (c *ProblemController) CreateProblemHandler(w http.ResponseWriter, r *http.Request) {
-	
-	
-
-	// 1. Parse JSON body
-	if err := json.NewDecoder(r.Body).Decode(&problemPayload); err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+	payloadAny := r.Context().Value(middleware.PayloadContextKey)
+	payload, ok := payloadAny.(models.Problem)
+	payload.Title = "Sample Demo Testing of Connection between cotroller,service,repository"
+	payload.Description = "This is a **markdown** test description. Will it parse?"
+	payload.Difficulty = "easy"
+	payload.TestCases = []models.TestCase{
+		{Input: "1 2", Output: "3"},
+		{Input: "4 5", Output: "6"},
+	}
+	payload.CodeSnippets = []models.CodeSnippet{
+		{Language: "go", StartSnippet: "func main() {", EndSnippet: "}"},
+		{Language: "cpp", StartSnippet: "#include <bits/stdc++.h> using namespace std; int main() {", EndSnippet: "}"},
+	}
+	payload.Topic = "Testing the Connection"
+	if !ok {
+		fomatter.ErrorResponse(w, http.StatusInternalServerError, "Invalid payload type in context", nil)
 		return
 	}
 
-	// 2. Call service layer
-	createdProblem, err := c.service.CreateProblem(r.Context(), &problemPayload)
+	response, err := controller.service.CreateProblem(r.Context(), &payload)
+	
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		fomatter.ErrorResponse(w, http.StatusInternalServerError, "Failed to create problem", err)
 		return
 	}
 
-	// 3. Return JSON response
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"Success": true,
-		"Message": "Problem created successfully",
-		"data":    createdProblem,
-	})
+	fomatter.SucessResponse(w, http.StatusCreated, "Problem created successfully", response)
 }

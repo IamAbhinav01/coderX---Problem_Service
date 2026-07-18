@@ -1,8 +1,11 @@
 package fomatter
 
-import "net/http"
+import (
+	"coderX/utils/json"
+	"net/http"
+)
 
-func ErrorResponse(w http.ResponseWriter,status int,message string,err error){
+func ErrorResponse(w http.ResponseWriter,status int,message string,err error) error {
 	response := map[string]any{}
 	response["status"] = status
 	response["message"] = message
@@ -12,4 +15,6 @@ func ErrorResponse(w http.ResponseWriter,status int,message string,err error){
 	}else{
 		response["error"] = nil
 	}
+	
+	return json.ConvertTOJSON(w, status, response)
 }

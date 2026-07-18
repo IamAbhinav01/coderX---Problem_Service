@@ -2,11 +2,12 @@ package routers
 
 import (
 	"coderX/controllers"
+	"coderX/middleware"
 
 	"github.com/go-chi/chi/v5"
 )
 
 func ProblemRoutes(r chi.Router, pc *controllers.ProblemController){
 
-	r.Post("/create-problem",pc.CreateProblem)
+	r.With(middleware.ProblemCreation).Post("/create-problem",pc.CreateProblem)
 }

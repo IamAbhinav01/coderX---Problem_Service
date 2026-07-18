@@ -1,8 +1,12 @@
 package app
 
 import (
+	"coderX/DB/repositories"
 	"coderX/config/db"
 	"coderX/config/env"
+	"coderX/controllers"
+	"coderX/routers"
+	"coderX/services"
 	"fmt"
 	"log"
 	"net/http"
@@ -36,9 +40,18 @@ func (app *Application) Run() error {
 	if strings.HasPrefix(addr, "") {
 		addr = ":" + addr
 	}
+	problem_collection := db.Problems
+	problem_repository := repositories.NewProblemsRepository(problem_collection)
+	problem_service := services.NewProblemService(problem_repository)
+	problem_controller := controllers.NewProblemController(problem_service)
+
+	appRouter := routers.ProblemRouter(problem_controller)
+
+	fmt.Println("configured application level stats")
+	
 	server := http.Server{
 		Addr:         addr,
-		Handler:      http.DefaultServeMux,
+		Handler:      appRouter,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}

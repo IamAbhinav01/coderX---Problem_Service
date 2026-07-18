@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"coderX/middleware"
 	"coderX/services"
 	"net/http"
 )
@@ -16,13 +17,16 @@ func NewProblemController (_service services.ProblemService) *ProblemController{
 }
 
 func (controller *ProblemController) CreateProblem(w http.ResponseWriter,r *http.Request){
-	controller.service.CreateProblem(r.Context(),)
+	
+	payload := r.Context().Value(middleware.PayloadContextKey)
+	response , err := controller.service.CreateProblem(r.Context(),payload)
 }
 
 
 
 func (c *ProblemController) CreateProblemHandler(w http.ResponseWriter, r *http.Request) {
-	var problemPayload models.Problem
+	
+	
 
 	// 1. Parse JSON body
 	if err := json.NewDecoder(r.Body).Decode(&problemPayload); err != nil {

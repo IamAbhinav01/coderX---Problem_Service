@@ -11,6 +11,7 @@ func ProblemRouter(pc *controllers.ProblemController) *chi.Mux{
 
 	router.Route("/api/v1/problems",func(r chi.Router) {
 		/* setup the problem routes*/
+		ProblemRoutes(r,pc)
 	})
 	return  router
 }

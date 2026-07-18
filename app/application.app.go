@@ -20,30 +20,30 @@ func NewApplication() *Application {
 	}
 }
 
-func (app *Application) Run() error{
+func (app *Application) Run() error {
 
 	err := db.DBInit()
 
-	if err != nil{
+	if err != nil {
 		log.Fatal("Unable to Initialise the Database")
 		return fmt.Errorf("Unable to connect to DataBase")
 	}
 
 	log.Printf("Database Initialised Succesully")
 
-	addr:= app.Config
+	addr := app.Config
 
-	if strings.HasPrefix(addr,""){
+	if strings.HasPrefix(addr, "") {
 		addr = ":" + addr
 	}
 	server := http.Server{
-		Addr: addr,
-		Handler: http.DefaultServeMux,
+		Addr:         addr,
+		Handler:      http.DefaultServeMux,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
 
-	log.Println("Server running on port ",server.Addr)
+	log.Println("Server running on port ", server.Addr)
 
 	return server.ListenAndServe()
 }

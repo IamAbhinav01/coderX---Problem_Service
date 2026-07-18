@@ -9,3 +9,4 @@ check_db.js
 *.cjs
 package.json
 package-lock.json
+test_db.go

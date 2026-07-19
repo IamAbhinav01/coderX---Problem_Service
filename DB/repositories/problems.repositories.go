@@ -31,7 +31,7 @@ func NewProblemsRepository(_db *mongo.Collection) *ProblemRepositoryImpl{
 func(repo *ProblemRepositoryImpl) CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error){
 
 	problemPayload.CreatedAt = time.Now()
-	problemPayload.ID = primitive.NewObjectID()
+	problemPayload.ID = primitive.NewObjectID().Hex()
 
 	_,err := repo.db.InsertOne(ctx,problemPayload)
 

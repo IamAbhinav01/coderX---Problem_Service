@@ -1,9 +1,10 @@
 package controllers
 
 import (
+	dto "coderX/DTO"
 	"coderX/middleware"
-	"coderX/services"
 	"coderX/models"
+	"coderX/services"
 	"coderX/utils/fomatter"
 	"net/http"
 )
@@ -20,27 +21,39 @@ func NewProblemController (_service services.ProblemService) *ProblemController{
 
 func (controller *ProblemController) CreateProblem(w http.ResponseWriter, r *http.Request) {
 	
-	payloadAny := r.Context().Value(middleware.PayloadContextKey)
-	payload, ok := payloadAny.(models.Problem)
-	payload.Title = "Sample Demo Testing of Connection between cotroller,service,repository"
-	payload.Description = "This is a **markdown** test description. Will it parse?"
-	payload.Difficulty = "easy"
-	payload.TestCases = []models.TestCase{
-		{Input: "1 2", Output: "3"},
-		{Input: "4 5", Output: "6"},
-	}
-	payload.CodeSnippets = []models.CodeSnippet{
-		{Language: "go", StartSnippet: "func main() {", EndSnippet: "}"},
-		{Language: "cpp", StartSnippet: "#include <bits/stdc++.h> using namespace std; int main() {", EndSnippet: "}"},
-	}
-	payload.Topic = "Testing the Connection"
-	if !ok {
-		fomatter.ErrorResponse(w, http.StatusInternalServerError, "Invalid payload type in context", nil)
-		return
+	dtoPayload := r.Context().Value(middleware.PayloadContextKey).(dto.GenerateProblem)
+	
+	var testCases []models.TestCase
+	for _, tc := range dtoPayload.TestCases {
+		testCases = append(testCases, models.TestCase{
+			Input:  tc.Input,
+			Output: tc.Output,
+		})
 	}
 
-	response, err := controller.service.CreateProblem(r.Context(), &payload)
-	
+	var codeSnippets []models.CodeSnippet
+	for _, cs := range dtoPayload.CodeSnippets {
+		codeSnippets = append(codeSnippets, models.CodeSnippet{
+			Language:     cs.Language,
+			StartSnippet: cs.StartSnippet,
+			MidSnippet:   cs.MidSnippet,
+			EndSnippet:   cs.EndSnippet,
+		})
+	}
+
+	// Create your final Model representation (Controller Layer)
+	modelPayload := models.Problem{
+		Title:        dtoPayload.Title,
+		Description:  dtoPayload.Description,
+		Difficulty:   dtoPayload.Difficulty,
+		TestCases:    testCases, 
+		CodeSnippets: codeSnippets, 
+		Editorial:    dtoPayload.Editorial,
+		Topic:        dtoPayload.Topic,
+	}
+
+	response, err := controller.service.CreateProblem(r.Context(), &modelPayload)
+
 	if err != nil {
 		fomatter.ErrorResponse(w, http.StatusInternalServerError, "Failed to create problem", err)
 		return

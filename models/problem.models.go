@@ -2,30 +2,28 @@ package models
 
 import (
 	"time"
-
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type TestCase struct{
-	Input string `bson:"input" json:"input"`
+type TestCase struct {
+	Input  string `bson:"input" json:"input"`
 	Output string `bson:"output" json:"output"`
 }
 
-type CodeSnippet struct{
-	Language string `bson:"language" json:"language"`
-	StartSnippet string `bson:"startsnippet" json:"startsnippet"`
-	MidSnippet string `bson:"midsnippet" json:"midsnippet,omitempty"`
-	EndSnippet string `bson:"endsnippet" json:"endsnippet"`
+type CodeSnippet struct {
+	Language     string `bson:"language" json:"language"`
+	StartSnippet string `bson:"startSnippet" json:"startSnippet"`
+	MidSnippet   string `bson:"midSnippet,omitempty" json:"midSnippet,omitempty"`
+	EndSnippet   string `bson:"endSnippet" json:"endSnippet"`
 }
 
 type Problem struct {
-	ID          primitive.ObjectID
-	Title       string `bson:"title" json:"title"`
-	Description string `bson:"description" json:"description"`
-	Difficulty  string `bson:"Difficulty" json:"Difficulty"`
-	TestCases []TestCase `bson:"testcases" json:"testcases"`
-	CodeSnippets []CodeSnippet `bson:"codesnippets" json:"codesnippets"`
-	Editorial string `bson:"editorial" json:"editorial,omitempty"`
-	Topic string `bson:"topic" json:"topic,omitempty"`
-	CreatedAt time.Time `bson:"createdAt" json:"createdAt"`
+	ID           string        `bson:"_id,omitempty" json:"id,omitempty"`
+	Title        string        `bson:"title" json:"title"`
+	Description  string        `bson:"description" json:"description"`
+	Difficulty   string        `bson:"difficulty" json:"difficulty"`
+	TestCases    []TestCase    `bson:"testCases" json:"testCases"`
+	CodeSnippets []CodeSnippet `bson:"codeSnippets" json:"codeSnippets"`
+	Editorial    string        `bson:"editorial" json:"editorial,omitempty"`
+	Topic        string        `bson:"topic" json:"topic,omitempty"`
+	CreatedAt    time.Time     `bson:"createdAt" json:"createdAt"`
 }

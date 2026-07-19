@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	"coderX/models"
+	dto "coderX/DTO"
 	"coderX/utils/fomatter"
 	"coderX/utils/json"
 	"coderX/utils/validators"
@@ -18,7 +18,7 @@ func ProblemCreation(next http.Handler) http.Handler{
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 
-			var payload models.Problem
+			var payload dto.GenerateProblem
 			
 			err := json.DecodeFromJSON(r,&payload)
 			if err != nil{

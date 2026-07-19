@@ -4,6 +4,7 @@ import (
 	"coderX/models"
 	"coderX/utils/fomatter"
 	"coderX/utils/json"
+	"coderX/utils/validators"
 	"context"
 	"net/http"
 )
@@ -24,7 +25,12 @@ func ProblemCreation(next http.Handler) http.Handler{
 				fomatter.ErrorResponse(w,http.StatusBadRequest,"Error occured while decoding the json",err)
 				return 
 			}
-			/*Validator*/
+			validationErr := validators.Validate.Struct(payload)
+			if validationErr != nil{
+				fomatter.ErrorResponse(w,http.StatusBadRequest,"Invalid Bad Request Payload",validationErr)
+				return 
+			}
+			
 			reqContext := r.Context()
 			ctx:= context.WithValue(reqContext,PayloadContextKey,payload)
 			

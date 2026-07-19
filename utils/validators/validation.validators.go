@@ -2,7 +2,7 @@ package validators
 
 import "github.com/go-playground/validator/v10"
 
-var validate validator.Validate
+var Validate validator.Validate
 
 func NewValidator() validator.Validate{
 	return *validator.New(
@@ -11,5 +11,5 @@ func NewValidator() validator.Validate{
 }
 
 func init() {
-	validate = NewValidator()
+	Validate = NewValidator()
 }

@@ -1,22 +1,18 @@
-package models
-
-import (
-	"time"
-)
+package dto
 
 type TestCase struct {
-	Input  string `bson:"input" json:"input"`
-	Output string `bson:"output" json:"output"`
+	Input  string `bson:"input" json:"input" validate:"required"`
+	Output string `bson:"output" json:"output" validate:"required"`
 }
 
 type CodeSnippet struct {
-	Language     string `bson:"language" json:"language"`
-	StartSnippet string `bson:"startSnippet" json:"startSnippet"`
-	MidSnippet   string `bson:"midSnippet,omitempty" json:"midSnippet,omitempty"`
-	EndSnippet   string `bson:"endSnippet" json:"endSnippet"`
+	Language     string `bson:"language" json:"language" validate:"required"`
+	StartSnippet string `bson:"startSnippet" json:"startSnippet" validate:"required"`
+	MidSnippet   string `bson:"midSnippet,omitempty" json:"midSnippet,omitempty" validate:"required"`
+	EndSnippet   string `bson:"endSnippet" json:"endSnippet" validate:"required"`
 }
 
-type Problem struct {
+type GenerateProblem struct {
 	ID           string        `bson:"_id,omitempty" json:"id,omitempty"`
 	Title        string        `bson:"title" json:"title"`
 	Description  string        `bson:"description" json:"description"`
@@ -25,5 +21,4 @@ type Problem struct {
 	CodeSnippets []CodeSnippet `bson:"codeSnippets" json:"codeSnippets"`
 	Editorial    string        `bson:"editorial" json:"editorial,omitempty"`
 	Topic        string        `bson:"topic" json:"topic,omitempty"`
-	CreatedAt    time.Time     `bson:"createdAt" json:"createdAt"`
 }

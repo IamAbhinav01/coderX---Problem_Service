@@ -13,7 +13,7 @@ import (
 
 type ProblemRepository interface {
 	CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error)
-	GetProblem(ctx context.Context,problemID int)(*models.Problem,error) 
+	GetProblem(ctx context.Context,problemID string)(*models.Problem,error) 
 	// GetAllProblems()
 	// UpdateProbelm()
 	// DeleteProblem()
@@ -32,7 +32,7 @@ func NewProblemsRepository(_db *mongo.Collection) *ProblemRepositoryImpl{
 func(repo *ProblemRepositoryImpl) CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error){
 
 	problemPayload.CreatedAt = time.Now()
-	problemPayload.ID = primitive.NewObjectID().Hex()
+	problemPayload.ID = primitive.NewObjectID().Hex() // this is actually make id a string
 
 	_,err := repo.db.InsertOne(ctx,problemPayload)
 
@@ -45,10 +45,10 @@ func(repo *ProblemRepositoryImpl) CreateProblem(ctx context.Context,problemPaylo
 
 }
 
-func(repo *ProblemRepositoryImpl) GetProblem(ctx context.Context,problemID int) (*models.Problem,error){
+func(repo *ProblemRepositoryImpl) GetProblem(ctx context.Context,problemID string) (*models.Problem,error){
 	
 	var problem *models.Problem
-	
+
 	err := repo.db.FindOne(ctx,bson.M{"ID":problemID}).Decode(&problem)
 	if err != nil{
 		log.Println("Error occured while retriving the user from the problem ID")

@@ -61,3 +61,8 @@ func (controller *ProblemController) CreateProblem(w http.ResponseWriter, r *htt
 
 	fomatter.SucessResponse(w, http.StatusCreated, "Problem created successfully", response)
 }
+
+func (controller *ProblemController) GetProblem(w http.ResponseWriter, r *http.Request){
+	
+	if r.Body().I
+}

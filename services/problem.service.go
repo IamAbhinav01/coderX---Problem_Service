@@ -11,7 +11,7 @@ import (
 
 type ProblemService interface {
 	CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error)
-	GetProblem(ctx context.Context,problemID int)(*models.Problem,error) 
+	GetProblem(ctx context.Context,problemID string)(*models.Problem,error) 
 }
 
 type ProblemServiceImpl struct {
@@ -44,7 +44,7 @@ func (service *ProblemServiceImpl) CreateProblem(ctx context.Context,problemPayl
 	return payload, nil
 }
 
-func (service *ProblemServiceImpl) GetProblem(ctx context.Context, problemID int) (*models.Problem,error){
+func (service *ProblemServiceImpl) GetProblem(ctx context.Context, problemID string) (*models.Problem,error){
 
 	payload,err := service.problem_repo.GetProblem(ctx,problemID)
 	if err != nil{

@@ -13,6 +13,7 @@ type ProblemService interface {
 	CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error)
 	GetProblem(ctx context.Context,problemID string)(*models.Problem,error) 
 	GetAllProblems(ctx context.Context) ([] *models.Problem,error)
+	UpdateProbelm(ctx context.Context, problemID string , problemPayload *models.Problem)(*models.Problem,error)
 }
 
 type ProblemServiceImpl struct {
@@ -66,4 +67,24 @@ func (service *ProblemServiceImpl) GetAllProblems(ctx context.Context) ([] *mode
 	}
 
 	return payload,nil
+}
+
+func (service *ProblemServiceImpl) UpdateProbelm(ctx context.Context, problemID string , problemPayload *models.Problem)(*models.Problem,error){
+
+	sanitizedDescription, err := utils.Sanitize_to_HTML(problemPayload.Description)
+	
+	if err != nil{
+		log.Fatal("Failed to santise the markdown")
+		return nil,err
+	}
+
+	problemPayload.Description = sanitizedDescription
+	fmt.Println("Problem DATA IS \n ",problemPayload)
+
+	payload,err := service.problem_repo.UpdateProbelm(ctx,problemID,problemPayload)
+	if err!= nil{
+		log.Println("Failed to update problem payload from service -> repository")
+		return nil,err
+	}
+	return payload, nil
 }

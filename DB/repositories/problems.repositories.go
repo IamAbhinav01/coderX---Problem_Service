@@ -16,7 +16,7 @@ type ProblemRepository interface {
 	GetProblem(ctx context.Context,problemID string)(*models.Problem,error) 
 	GetAllProblems(ctx context.Context) ([] *models.Problem,error)
 	UpdateProbelm(ctx context.Context, problemID string , problemPayload *models.Problem)(*models.Problem,error)
-	// DeleteProblem()
+	DeleteProblem(ctx context.Context,problemID string) error
 }
 
 type ProblemRepositoryImpl struct {
@@ -100,6 +100,23 @@ func (repo *ProblemRepositoryImpl) UpdateProbelm(ctx context.Context, problemID 
 	}
 
 	problemPayload.ID = problemID
-	
+
 	return problemPayload,nil
+}
+
+func (repo *ProblemRepositoryImpl) DeleteProblem(ctx context.Context,problemID string) error{
+
+	filter  := bson.M{"_id":problemID}
+
+	response , err := repo.db.DeleteOne(ctx,filter)
+	if err != nil{
+		log.Println("Error occurred while deleting the problem from MongoDB:", err)
+		return err
+	}
+
+	if response.DeletedCount == 0{
+		return mongo.ErrNoDocuments
+	}
+
+	return nil
 }

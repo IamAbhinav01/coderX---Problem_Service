@@ -14,6 +14,7 @@ type ProblemService interface {
 	GetProblem(ctx context.Context,problemID string)(*models.Problem,error) 
 	GetAllProblems(ctx context.Context) ([] *models.Problem,error)
 	UpdateProbelm(ctx context.Context, problemID string , problemPayload *models.Problem)(*models.Problem,error)
+	DeleteProblem(ctx context.Context,problemID string) error
 }
 
 type ProblemServiceImpl struct {
@@ -87,4 +88,8 @@ func (service *ProblemServiceImpl) UpdateProbelm(ctx context.Context, problemID 
 		return nil,err
 	}
 	return payload, nil
+}
+
+func (service *ProblemServiceImpl) DeleteProblem(ctx context.Context,problemID string) error{
+	
 }

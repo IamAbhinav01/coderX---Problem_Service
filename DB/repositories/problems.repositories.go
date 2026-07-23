@@ -14,7 +14,7 @@ import (
 type ProblemRepository interface {
 	CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error)
 	GetProblem(ctx context.Context,problemID string)(*models.Problem,error) 
-	// GetAllProblems()
+	GetAllProblems(ctx context.Context) ([] *models.Problem,error)
 	// UpdateProbelm()
 	// DeleteProblem()
 }
@@ -49,11 +49,15 @@ func(repo *ProblemRepositoryImpl) GetProblem(ctx context.Context,problemID strin
 	
 	var problem *models.Problem
 
-	err := repo.db.FindOne(ctx,bson.M{"ID":problemID}).Decode(&problem)
+	err := repo.db.FindOne(ctx,bson.M{"_id":problemID}).Decode(&problem)
 	if err != nil{
 		log.Println("Error occured while retriving the user from the problem ID")
 		return nil,err
 	}
 
 	return problem,nil;
+}
+
+func(repo *ProblemRepositoryImpl) GetAllProblems(ctx context.Context) ([] *models.Problem,error){
+	
 }

@@ -7,6 +7,8 @@ import (
 	"coderX/services"
 	"coderX/utils/fomatter"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
 )
 
 type ProblemController struct {
@@ -64,5 +66,18 @@ func (controller *ProblemController) CreateProblem(w http.ResponseWriter, r *htt
 
 func (controller *ProblemController) GetProblem(w http.ResponseWriter, r *http.Request){
 	
-	if r.Body().I
+	problemID := chi.URLParam(r,"id")
+	if problemID == ""{
+		fomatter.ErrorResponse(w,http.StatusBadRequest,"ProblemID is required",nil)
+		return
+	}
+
+	response,err := controller.service.GetProblem(r.Context(),problemID)
+	if err != nil{
+		fomatter.ErrorResponse(w,http.StatusBadGateway,"Problem not found",err)
+		return
+	}
+
+	fomatter.SucessResponse(w,http.StatusAccepted,"Problem retrieved successfully",response)
+
 }

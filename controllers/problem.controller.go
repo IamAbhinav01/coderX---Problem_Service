@@ -86,6 +86,9 @@ func (controller *ProblemController) GetAllProblems(w http.ResponseWriter, r *ht
 
 	response,err := controller.service.GetAllProblems(r.Context())
 	if err != nil{
-		
+		fomatter.ErrorResponse(w,http.StatusBadGateway,"Unable to fetch all the prblems",err)
+		return
 	}
+
+	fomatter.SucessResponse(w,http.StatusAccepted,"Problems retrieved succesfully",response)
 }

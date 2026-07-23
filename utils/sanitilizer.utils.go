@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"log"
 
+	htmltomarkdown "github.com/JohannesKaufmann/html-to-markdown/v2"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
@@ -31,5 +32,11 @@ func Sanitize_to_HTML(markdown string) (string, error) {
 	}
 	safeHtml:=policy.SanitizeBytes(buf.Bytes())
 
-	return string(safeHtml),nil
+	sanitizedMarkdown, err := htmltomarkdown.ConvertString(string(safeHtml))
+	if err != nil {
+		log.Println("Error occurred while converting HTML back to Markdown:", err)
+		return "", err
+	}
+
+	return sanitizedMarkdown, nil
 }

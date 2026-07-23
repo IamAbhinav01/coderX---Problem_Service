@@ -15,7 +15,7 @@ type ProblemRepository interface {
 	CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error)
 	GetProblem(ctx context.Context,problemID string)(*models.Problem,error) 
 	GetAllProblems(ctx context.Context) ([] *models.Problem,error)
-	// UpdateProbelm()
+	UpdateProbelm(ctx context.Context, problemID string , problemPayload *models.Problem)(*models.Problem,error)
 	// DeleteProblem()
 }
 
@@ -77,4 +77,18 @@ func(repo *ProblemRepositoryImpl) GetAllProblems(ctx context.Context) ([] *model
 	}
 
 	return problems,nil
+}
+
+func (repo *ProblemRepositoryImpl) UpdateProbelm(ctx context.Context, problemID string , problemPayload *models.Problem)(*models.Problem,error){
+
+	filter := bson.M{"_id":problemID}
+	update := bson.M{
+		"$set":bson.M{
+			"title":problemPayload.Title,
+			"description":problemPayload.Description,
+			"difficulty":problemPayload.Difficulty,
+
+		}
+	}
+	repo.db.UpdateOne(ctx,filter,update)
 }

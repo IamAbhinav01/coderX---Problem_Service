@@ -12,4 +12,6 @@ func ProblemRoutes(r chi.Router, pc *controllers.ProblemController){
 	r.With(middleware.ProblemCreation).Post("/create-problem",pc.CreateProblem)
 	r.Get("/{id}",pc.GetProblem)
 	r.Get("/",pc.GetAllProblems)
+	r.With(middleware.ProblemCreation).Put("/{id}",pc.UpdateProblem)
+	r.Delete("/{id}",pc.DeleteProblem)
 }

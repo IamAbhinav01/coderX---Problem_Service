@@ -15,8 +15,8 @@ type ProblemRepository interface {
 	CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error)
 	GetProblem(ctx context.Context,problemID string)(*models.Problem,error) 
 	GetAllProblems(ctx context.Context) ([] *models.Problem,error)
-	// UpdateProbelm()
-	// DeleteProblem()
+	UpdateProbelm(ctx context.Context, problemID string , problemPayload *models.Problem)(*models.Problem,error)
+	DeleteProblem(ctx context.Context,problemID string) error
 }
 
 type ProblemRepositoryImpl struct {
@@ -77,4 +77,46 @@ func(repo *ProblemRepositoryImpl) GetAllProblems(ctx context.Context) ([] *model
 	}
 
 	return problems,nil
+}
+
+func (repo *ProblemRepositoryImpl) UpdateProbelm(ctx context.Context, problemID string , problemPayload *models.Problem)(*models.Problem,error){
+
+	filter := bson.M{"_id":problemID}
+	update := bson.M{
+		"$set":bson.M{
+			"title":problemPayload.Title,
+			"description":problemPayload.Description,
+			"difficulty":problemPayload.Difficulty,
+			"testCases":problemPayload.TestCases,
+			"codeSnippets":problemPayload.CodeSnippets,
+			"editorial":problemPayload.Editorial,
+			"topic":problemPayload.Topic,
+		},
+	}
+	_,err := repo.db.UpdateOne(ctx,filter,update)
+	if err != nil{
+		log.Println("Error occurred while updating the problem in MongoDB:", err)
+		return nil,err
+	}
+
+	problemPayload.ID = problemID
+
+	return problemPayload,nil
+}
+
+func (repo *ProblemRepositoryImpl) DeleteProblem(ctx context.Context,problemID string) error{
+
+	filter  := bson.M{"_id":problemID}
+
+	response , err := repo.db.DeleteOne(ctx,filter)
+	if err != nil{
+		log.Println("Error occurred while deleting the problem from MongoDB:", err)
+		return err
+	}
+
+	if response.DeletedCount == 0{
+		return mongo.ErrNoDocuments
+	}
+
+	return nil
 }

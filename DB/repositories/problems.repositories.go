@@ -87,8 +87,19 @@ func (repo *ProblemRepositoryImpl) UpdateProbelm(ctx context.Context, problemID 
 			"title":problemPayload.Title,
 			"description":problemPayload.Description,
 			"difficulty":problemPayload.Difficulty,
-
-		}
+			"testCases":problemPayload.TestCases,
+			"codeSnippets":problemPayload.CodeSnippets,
+			"editorial":problemPayload.Editorial,
+			"topic":problemPayload.Topic,
+		},
 	}
-	repo.db.UpdateOne(ctx,filter,update)
+	_,err := repo.db.UpdateOne(ctx,filter,update)
+	if err != nil{
+		log.Println("Error occurred while updating the problem in MongoDB:", err)
+		return nil,err
+	}
+
+	problemPayload.ID = problemID
+	
+	return problemPayload,nil
 }

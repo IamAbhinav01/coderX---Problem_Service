@@ -11,6 +11,7 @@ import (
 
 type ProblemService interface {
 	CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error)
+	GetProblem(ctx context.Context,problemID int)(*models.Problem,error) 
 }
 
 type ProblemServiceImpl struct {
@@ -38,6 +39,19 @@ func (service *ProblemServiceImpl) CreateProblem(ctx context.Context,problemPayl
 	payload,err := service.problem_repo.CreateProblem(ctx,problemPayload)
 	if err!= nil{
 		log.Println("Failed to send problem payload from service -> repository")
+		return nil,err
 	}
 	return payload, nil
+}
+
+func (service *ProblemServiceImpl) GetProblem(ctx context.Context, problemID int) (*models.Problem,error){
+
+	payload,err := service.problem_repo.GetProblem(ctx,problemID)
+	if err != nil{
+		log.Println("Failed to senf problemID from service -> repository")
+		return nil,err
+	}
+
+	return payload,nil
+
 }

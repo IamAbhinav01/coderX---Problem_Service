@@ -7,10 +7,16 @@ import (
 
 func SucessResponse(w http.ResponseWriter,status int,message string,data any) error{
 
-	response:=map[string]any{}
-	response["status"] = status
-	response["message"] = message
-	response["data"] = data
+	response:=map[string]any{
+		"Success": true,
+		"Message": message,
+	}
+	if data != nil {
+		response["data"] = data
+	}
+	if status == http.StatusCreated {
+		response["error"] = map[string]any{}
+	}
 
 	return json.ConvertTOJSON(w,status,response)
 }

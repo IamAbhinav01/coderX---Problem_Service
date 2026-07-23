@@ -81,3 +81,11 @@ func (controller *ProblemController) GetProblem(w http.ResponseWriter, r *http.R
 	fomatter.SucessResponse(w,http.StatusAccepted,"Problem retrieved successfully",response)
 
 }
+
+func (controller *ProblemController) GetAllProblems(w http.ResponseWriter, r *http.Request){
+
+	response,err := controller.service.GetAllProblems(r.Context())
+	if err != nil{
+		
+	}
+}

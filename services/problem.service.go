@@ -12,6 +12,7 @@ import (
 type ProblemService interface {
 	CreateProblem(ctx context.Context,problemPayload *models.Problem) (*models.Problem, error)
 	GetProblem(ctx context.Context,problemID string)(*models.Problem,error) 
+	GetAllProblems(ctx context.Context) ([] *models.Problem,error)
 }
 
 type ProblemServiceImpl struct {
@@ -54,4 +55,15 @@ func (service *ProblemServiceImpl) GetProblem(ctx context.Context, problemID str
 
 	return payload,nil
 
+}
+
+func (service *ProblemServiceImpl) GetAllProblems(ctx context.Context) ([] *models.Problem,error){
+
+	payload,err := service.problem_repo.GetAllProblems(ctx)
+	if err!= nil{
+		log.Println("Failed to fetch all problems")
+		return nil,err
+	}
+
+	return payload,nil
 }

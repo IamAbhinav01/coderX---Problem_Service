@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type ProblemController struct {
@@ -140,4 +141,25 @@ func (controller *ProblemController) UpdateProblem(w http.ResponseWriter, r *htt
 	}
 
 	fomatter.SucessResponse(w, http.StatusOK, "Problem updated successfully", response)
+}
+
+func (controller *ProblemController) DeleteProblem(w http.ResponseWriter,r *http.Request){
+
+	problemID := chi.URLParam(r,"id")
+	if problemID == ""{
+		fomatter.ErrorResponse(w,http.StatusBadRequest,"ProblemID is required",nil)
+		return
+	}
+
+	err := controller.service.DeleteProblem(r.Context(),problemID)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			fomatter.ErrorResponse(w, http.StatusNotFound, "Problem not found", err)
+			return
+		}
+		fomatter.ErrorResponse(w, http.StatusInternalServerError, "Failed to delete problem", err)
+		return
+	}
+	fomatter.SucessResponse(w, http.StatusOK, "Problem deleted successfully", nil)
+
 }

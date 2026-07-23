@@ -91,5 +91,11 @@ func (service *ProblemServiceImpl) UpdateProbelm(ctx context.Context, problemID 
 }
 
 func (service *ProblemServiceImpl) DeleteProblem(ctx context.Context,problemID string) error{
-	
+
+	err:= service.problem_repo.DeleteProblem(ctx,problemID)
+	if err != nil{
+		log.Println("Error happend while deleting the data ",err)
+		return err 
+	}
+	return nil;
 }
